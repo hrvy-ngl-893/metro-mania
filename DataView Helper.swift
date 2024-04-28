@@ -41,7 +41,6 @@ struct CommuterInfoView: View {
         }
         .padding()
         .padding(.top, stripeHeight)
-        .frame(height: 120)
         .foregroundColor(Color(hex: 0x1d3630))
         .background {
             ZStack(alignment: .top) {

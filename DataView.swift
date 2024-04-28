@@ -98,9 +98,6 @@ struct DataView: View {
                             
                         }
                         .padding()
-                        .frame(height: 120)
-                        .frame(maxWidth: geometry.size.width)
-                        .cornerRadius(16)
                         .padding(.top, stripeHeight)
                         .foregroundColor(Color(hex: 0x1d3630))
                         .background {
