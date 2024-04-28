@@ -1,4 +1,5 @@
 import SwiftUI
+
 enum SortingCriteria: String, CaseIterable {
     case emissions = "Emission"
     case avgtime = "Time"
@@ -6,10 +7,13 @@ enum SortingCriteria: String, CaseIterable {
     
 }
 
+
+
 struct LogView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var selectedCriteria: SortingCriteria = .avgtime
-    let stripeHeight = 16.0
+    @State private var selectedLogID: Int? = nil
+    
     var sortedLogEntries: [(logID: Int, logTitle: String, emissions: Double, roadspace: Double, avgtime: Double)] {
         switch selectedCriteria {
         case .avgtime:
@@ -136,6 +140,9 @@ struct LogView: View {
                                 .foregroundColor(Color(hex: 0x308966))
                             }
                             .clipShape(RoundedRectangle(cornerRadius: stripeHeight, style: .continuous))
+                            .onTapGesture {
+                                selectedLogID = data.logID
+                            }
                         }
                     }
                     .padding()
@@ -146,6 +153,11 @@ struct LogView: View {
             }
         }
         .background(Color(hex: 0xf5f5f5))
+        .sheet(item: $selectedLogID) { logID in // Present sheet when selectedLogID is set
+                    if let simulation = simulationData.first(where: { $0.simulationID == logID }) {
+                        DataView(simulationData: [(simulationID: simulation.simulationID, walkCount: simulation.walkCount, bikeCount: simulation.bikeCount, carCount: simulation.carCount, jeepCount: simulation.jeepCount, busCount: simulation.busCount)])
+                    }
+                }
     }
     private func timeStringFrom(hours: Double) -> String {
         let totalSeconds = Int(hours * 3600)
@@ -156,7 +168,11 @@ struct LogView: View {
         return String(format: "%02d:%02d:%02d", hoursComponent, minutesComponent, secondsComponent)
     }
 }
-
+extension Int: Identifiable {
+    public var id: Int {
+        self
+    }
+}
 struct LogView_Previews: PreviewProvider {
     static var previews: some View {
         LogView()
