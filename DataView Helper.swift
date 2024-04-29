@@ -81,14 +81,12 @@ struct EmissionChartView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 HStack(alignment: .bottom, spacing: 10) {
-
-                        ForEach(transportTypes, id: \.name) { transportType in
-                            let emission = calculateEmission(for: transportType.name)
-
-                            let height = (totalHeight * CGFloat(emission / maxEmission))
-                            Rectangle()
-                                .frame(width: geometry.size.width * 0.17, height: height > 0 ? height : 1)
-                                .cornerRadius(8)
+                    ForEach(transportTypes, id: \.name) { transportType in
+                        let emission = calculateEmission(for: transportType.name)
+                        let height = emission > 0 ? (totalHeight * CGFloat(emission / maxEmission)) : 0
+                        Rectangle()
+                            .frame(width: geometry.size.width * 0.17, height: height > 0 ? height : 1)
+                            .cornerRadius(8)
                     }
                 }
                 .frame(maxWidth: geometry.size.width, alignment: .center)
@@ -167,11 +165,9 @@ struct RoadspaceChartView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 HStack(alignment: .bottom, spacing: 10) {
-
                     ForEach(transportTypes, id: \.name) { transportType in
                         let roadspace = calculateRoadspace(for: transportType.name)
-
-                        let heightR = (totalHeightR * CGFloat(roadspace / maxRoadspace))
+                        let heightR = roadspace > 0 ? (totalHeightR * CGFloat(roadspace / maxRoadspace)) : 0
                         Rectangle()
                             .frame(width: geometry.size.width * 0.17, height: heightR > 0 ? heightR : 1)
                             .cornerRadius(8)
